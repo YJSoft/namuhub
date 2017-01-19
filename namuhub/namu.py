@@ -11,7 +11,7 @@ __all__ = 'contrib',
 
 URL = 'https://namu.wiki/contribution/author/{author}/document'
 URL_IP = 'https://namu.wiki/contribution/ip/{author}/document'
-DATE_FORMAT = r'%Y-%m-%d %H:%M:%S'
+DATE_FORMAT = r'%Y-%m-%d %H:%M:%S%z'
 RE_IP = re.compile('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$')
 
 class NamuContrib(object):
@@ -37,7 +37,7 @@ class NamuContrib(object):
         if isinstance(when, datetime):
             self._when = when
         else:
-            self._when = datetime.strptime(when, DATE_FORMAT) - timedelta(hours=9)
+            self._when = datetime.strptime(when, DATE_FORMAT) + timedelta(hours=9)
 
     def as_dict(self):
         obj = {
@@ -94,7 +94,7 @@ def contrib(username):
                 except KeyError:
                     revision = 1
             changes = int(info.select('span')[-1].string)
-            when = row.select('td')[2].string.strip()
+            when = row.select('td')[2].select('time')[0].string.strip()
             item = NamuContrib(document=document, revision=revision, changes=changes, when=when)
 
             # Find reverts
