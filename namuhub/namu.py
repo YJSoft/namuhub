@@ -37,7 +37,7 @@ class NamuContrib(object):
         if isinstance(when, datetime):
             self._when = when
         else:
-            self._when = datetime.strptime(when, DATE_FORMAT) + timedelta(hours=9)
+            self._when = datetime.strptime(when, DATE_FORMAT) - timedelta(hours=9)
 
     def as_dict(self):
         obj = {
